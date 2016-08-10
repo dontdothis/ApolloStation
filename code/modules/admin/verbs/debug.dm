@@ -1105,7 +1105,28 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 	message_admins("<span class='notice'>[key_name_admin(usr)] setup the supermatter engine  [response == "Setup except coolant" ? "without coolant": ""]</span>")
 	return
 
+/client/proc/supermatter_dam_debug()
+	set category = "Debug"
+	set name = "Debug supermatter dam calc"
+	set desc = "Change the supermatter damage calculation vars"
 
+	if(!check_rights(R_DEBUG|R_ADMIN))      return
+	var/dama = getSMVar(1, "dama")
+	var/damb = getSMVar(1, "damb")
+	var/damc = getSMVar(1, "damc")
+	alert("Adjust the damage calculation formula, standart: (0.7*1.4^CoreLevel*EmitterPower)/500. Current: ([dama]*[damb]^CoreLevel*EmitterPower/[damc]",,"ok")
+
+	var/a = input("Select a (leave blank for no change)") as null|num
+	if(!isnull(a))	setSMVar(0, "dama", a)
+	var/b = input("Select b (leave blank for no change)") as null|num
+	if(!isnull(b))	setSMVar(0, "damb", b)
+	var/c = input("Select c (leave blank for no change)") as null|num
+	if(!isnull(c))	setSMVar(0, "damc", c)
+
+	var/ndama = getSMVar(1, "dama")
+	var/ndamb = getSMVar(1, "damb")
+	var/ndamc = getSMVar(1, "damc")
+	alert("The new formula is: ([ndama]*[ndamb]^CoreLevel*EmitterPower/[ndamc]",,"Okay")
 
 /client/proc/cmd_debug_mob_lists()
 	set category = "Debug"
@@ -1156,5 +1177,5 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 	set category = "Debug"
 	set name = "Advanced WinCall"
 	set desc = "Allows you to open specific windows typically unavailable"
-	
+
 	winset(src, null, "command=.command")
